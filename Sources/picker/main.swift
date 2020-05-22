@@ -8,12 +8,11 @@ struct Config: Codable {
 
 struct Picker: ParsableCommand {
     func run() throws {
-        var results: [String] = []
         let ops = readOptions()
         
-        results.append(pick(at: Int.random(in: 0..<ops.count), from: ops))
+        let chosenOne = pick(at: Int.random(in: 0..<ops.count), from: ops)
         
-        print("Choice: \(results) Was chosen from: \(ops)")
+        print("Choice: 🎉 \(chosenOne.capitalized) 🎉 Was chosen from: \(ops)")
     }
     
     func pick(at index: Int, from options: [String]) -> String {

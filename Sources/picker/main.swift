@@ -7,6 +7,11 @@ struct Config: Codable {
 }
 
 struct Picker: ParsableCommand {
+    static let configuration = CommandConfiguration(
+        abstract: "Randomly do things",
+        subcommands: [List.self]
+    )
+    
     func run() throws {
         let ops = readOptions()
         
@@ -14,9 +19,22 @@ struct Picker: ParsableCommand {
         
         print("Choice: 🎉 \(chosenOne.capitalized) 🎉 Was chosen from: \(ops)")
     }
-    
-    func pick(at index: Int, from options: [String]) -> String {
-        return options[index]
+}
+
+extension Picker {
+    struct List: ParsableCommand {
+        func run() {
+            var ops = readOptions()
+            var randomList : [String] = []
+            
+            for _ in ops {
+                let chosenOne = pick(at: Int.random(in: 0..<ops.count), from: ops)
+                ops = ops.filter{$0 != chosenOne}
+                randomList.append(chosenOne)
+            }
+
+            print("Random List: \n \(randomList)")
+        }
     }
     
 }
@@ -34,6 +52,10 @@ func readOptions() -> [String] {
     
     
     
+}
+
+func pick(at index: Int, from options: [String]) -> String {
+    return options[index]
 }
 
 Picker.main()
